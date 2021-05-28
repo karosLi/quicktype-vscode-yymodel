@@ -2,6 +2,17 @@
 
 All notable changes to the "Paste JSON as Code (Refresh)" extension will be documented in this file.
 
+## 0.1.1 - 2021-05-28
+
+* Update README.md
+* Update npm packages & fixes `npm audit` issues
+
+    ```sh
+    npm i node-persist@3 quicktype-core typescript@4
+    npm i -D @types/node-persist@3 @types/node@14 esbuild
+    npm audit fix
+    ```
+
 ## 0.1.0 - 2021-05-28
 
 * Initial version

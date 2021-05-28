@@ -1,4 +1,12 @@
-[![Marketplace](https://vsmarketplacebadge.apphb.com/version/quicktype.quicktype.svg)](https://marketplace.visualstudio.com/items/quicktype.quicktype) [![Installs](https://vsmarketplacebadge.apphb.com/installs/quicktype.quicktype.svg)](https://marketplace.visualstudio.com/items/quicktype.quicktype) [![Ratings](https://vsmarketplacebadge.apphb.com/rating-short/quicktype.quicktype.svg)](https://marketplace.visualstudio.com/items/quicktype.quicktype)
+[![Marketplace](https://vsmarketplacebadge.apphb.com/version/quicktype.quicktype.svg)](https://marketplace.visualstudio.com/items/doggy8088.quicktype-refresh) [![Installs](https://vsmarketplacebadge.apphb.com/installs/doggy8088.quicktype-refresh.svg)](https://marketplace.visualstudio.com/items/doggy8088.quicktype-refresh) [![Ratings](https://vsmarketplacebadge.apphb.com/rating-short/doggy8088.quicktype-refresh.svg)](https://marketplace.visualstudio.com/items/doggy8088.quicktype-refresh)
+
+## FAQ
+
+Q: There is already a [Paste JSON as Code](https://marketplace.visualstudio.com/items?itemName=quicktype.quicktype) extension. Why do you publish a **Refresh** version of the same extension?
+
+A: This extension is originally from [Paste JSON as Code](https://marketplace.visualstudio.com/items?itemName=quicktype.quicktype) extension. It because the original extension is not updating since **9/20/2018, 11:48:28 PM**. Many of the already fixed bugs/issues are not released. That's why I published this extension with **latest** version from the [quicktype/quicktype-vscode](https://github.com/quicktype/quicktype-vscode) repo.
+
+## Introduction
 
 **Supports** `TypeScript`, `Python`, `Go`, `Ruby`, `C#`, `Java`, `Swift`, `Rust`, `Kotlin`, `C++`, `Flow`, `Objective-C`, `JavaScript`, `Elm`, and `JSON Schema`.
 
@@ -19,7 +27,7 @@ For a more powerful experience, including custom options and the ability to gene
 
 ## Installing
 
-This extension is available for free in the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items/quicktype.quicktype)
+This extension is available for free in the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items/doggy8088.quicktype-refresh)
 
 ## Customization
 
@@ -29,6 +37,6 @@ This extension is available for free in the [Visual Studio Code Marketplace](htt
 
 ## Contribute!
 
-quicktype is an open source project, and we're always happy about contributors. If you can think of a way to improve [this extension](https://github.com/quicktype/quicktype-vscode), or [quicktype](https://github.com/quicktype/quicktype), please consider contributing, especially if you know TypeScript. Code is only one way to contribute, though: we're particularly short on documentation. We'd also love to hear your feedback - come [talk to us on Slack](http://slack.quicktype.io)!
+quicktype is an open source project, and we're always happy about contributors. If you can think of a way to improve [this extension](https://github.com/quicktype/quicktype-vscode), or [quicktype](https://github.com/quicktype/quicktype), please consider contributing, especially if you know TypeScript. Code is only one way to contribute, though: we're particularly short on documentation.
 
 If you find a bug, please [report it on GitHub](https://github.com/quicktype/quicktype-vscode/issues).
