@@ -1,9 +1,9 @@
 {
-    "name": "quicktype",
-    "displayName": "Paste JSON as Code",
+    "name": "quicktype-refresh",
+    "displayName": "Paste JSON as Code (Refresh)",
     "description": "Copy JSON, paste as Go, TypeScript, C#, C++ and more.",
     "version": "0.1.0",
-    "publisher": "quicktype",
+    "publisher": "doggy8088",
     "icon": "media/icon.png",
     "galleryBanner": {
         "color": "#00212b",
@@ -22,7 +22,7 @@
         "url": "https://github.com/quicktype/quicktype"
     },
     "engines": {
-        "vscode": "^1.31.0"
+        "vscode": "^1.52.0"
     },
     "categories": [
         "Other"
@@ -141,8 +141,9 @@
     "scripts": {
         "publish": "vsce publish -p $VSCE_TOKEN",
         "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
+        "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/src/extension.js --external:vscode --format=cjs --platform=node",
+        "compile": "npm run -S esbuild-base -- --minify",
+        "watch": "npm run -S esbuild-base -- --sourcemap --watch",
         "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
@@ -150,9 +151,10 @@
         "@types/node": "^8.10.29",
         "@types/node-persist": "0.0.33",
         "@types/urijs": "github:quicktype/types-urijs",
+        "esbuild": "^0.12.4",
         "typescript": "^3.0.3",
-        "vsce": "^1.71.0",
-        "vscode": "^1.1.36"
+        "vsce": "^1.88.0",
+        "vscode": "^1.1.37"
     },
     "dependencies": {
         "node-persist": "^3.0.1",

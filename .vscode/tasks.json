@@ -10,9 +10,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "identifier": "npm",
+            "label": "npm",
             "type": "npm",
-            "script": "watch",
+            "script": "esbuild-base",
             "problemMatcher": [
                 "$tsc-watch"
             ],
