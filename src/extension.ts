@@ -16,8 +16,8 @@ import {
     RendererOptions,
     Options,
     inferenceFlagNames
-} from "./quicktype-core";
-import { schemaForTypeScriptSources } from "./quicktype-typescript-input";
+} from "@willh/quicktype-core";
+import { schemaForTypeScriptSources } from "@willh/quicktype-typescript-input";
 
 const configurationSection = "quicktype";
 

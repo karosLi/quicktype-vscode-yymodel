@@ -2,6 +2,10 @@
 
 All notable changes to the "Paste JSON as Code (Refresh)" extension will be documented in this file.
 
+## 1.0.2 - 2022-05-17
+
+* Fixes a bug on switching target language for C#.
+
 ## 1.0.1 - 2022-05-09
 
 * Update `README.md` and `CHANGELOG.md`.

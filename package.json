@@ -2,7 +2,7 @@
     "name": "quicktype-refresh",
     "displayName": "Paste JSON as Code (Refresh)",
     "description": "Copy JSON, paste as Go, TypeScript, C#, C++ and more.",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "publisher": "doggy8088",
     "icon": "media/icon.png",
     "galleryBanner": {
@@ -165,19 +165,20 @@
         "vscode": "^1.1.37"
     },
     "dependencies": {
-        "lodash": "^4.17.21",
-        "unicode-properties": "github:quicktype/unicode-properties#dist",
-
         "@mark.probst/typescript-json-schema": "~0.32.0",
         "@mark.probst/unicode-properties": "~1.1.0",
+        "@willh/quicktype-core": "^6.0.81",
+        "@willh/quicktype-typescript-input": "^0.0.16",
         "browser-or-node": "^1.2.1",
         "collection-utils": "^1.0.1",
         "is-url": "^1.2.4",
         "isomorphic-fetch": "^2.2.1",
         "js-base64": "^2.4.3",
+        "lodash": "^4.17.21",
         "pako": "^1.0.6",
         "pluralize": "^7.0.0",
         "readable-stream": "2.3.0",
+        "unicode-properties": "github:quicktype/unicode-properties#dist",
         "urijs": "^1.19.1",
         "wordwrap": "^1.0.0",
         "yaml": "^1.5.0"
