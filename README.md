@@ -31,12 +31,14 @@ This extension is available for free in the [Visual Studio Code Marketplace](htt
 
 ## Customization
 
--   `quicktype.justTypes`: Generate only types, or also produce (de)serialization code when using "Open quicktype". When using "Paste", you can pick between the commands for "types" and "code", without having to set this option.
+- `quicktype.justTypes`: Generate only types, or also produce (de)serialization code when using "Open quicktype". When using "Paste", you can pick between the commands for "types" and "code", without having to set this option.
 
--   `quicktype.inferMaps`, `quicktype.inferEnums`, `quicktype.inferDateTimes`, `quicktype.inferUuids`, `quicktype.inferBoolStrings`, `quicktype.inferIntegerStrings`: Tell quicktype whether it should try to infer those types from the input JSON. This is not a precise science, so sometimes the guess will be wrong, which is why you can turn them off through these options. Also, quicktype doesn't support dates, UUIDs and stringified integers/booleans in all target languages yes.
+- `quicktype.inferMaps`, `quicktype.inferEnums`, `quicktype.inferDateTimes`, `quicktype.inferUuids`, `quicktype.inferBoolStrings`, `quicktype.inferIntegerStrings`: Tell quicktype whether it should try to infer those types from the input JSON. This is not a precise science, so sometimes the guess will be wrong, which is why you can turn them off through these options. Also, quicktype doesn't support dates, UUIDs and stringified integers/booleans in all target languages yes.
+
+- `quicktype.pickCsharpTargetLanguage`: In the .NET world, there are two popular JSON serialization/de-serialization packages. The previous version of QuickType only support for [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json) (a.k.a. Json.NET). This verion of `Paste JSON as Code (Refresh)` add support for [System.Text.Json](https://www.nuget.org/packages/System.Text.Json) package and support `DateOnly` and `TimeOnly` type that been added from .NET 6.
 
 ## Contribute!
 
-quicktype is an open source project, and we're always happy about contributors. If you can think of a way to improve [this extension](https://github.com/quicktype/quicktype-vscode), or [quicktype](https://github.com/quicktype/quicktype), please consider contributing, especially if you know TypeScript. Code is only one way to contribute, though: we're particularly short on documentation.
+[quicktype](https://github.com/quicktype/quicktype) is an open source project, and we're always happy about contributors. Due to the lack of maintainence of the original project, I forked a [new one](https://github.com/doggy8088/quicktype) for further developments.  If you can think of a way to improve [this extension](https://github.com/doggy8088/quicktype-vscode-refresh), or [quicktype](https://github.com/doggy8088/quicktype), please consider contributing, especially if you know TypeScript. Code is only one way to contribute, though: we're particularly short on documentation.
 
-If you find a bug, please [report it on GitHub](https://github.com/quicktype/quicktype-vscode/issues).
+If you find a bug, please [report it on GitHub](https://github.com/doggy8088/quicktype-vscode-refresh/issues).

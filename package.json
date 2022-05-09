@@ -2,7 +2,7 @@
     "name": "quicktype-refresh",
     "displayName": "Paste JSON as Code (Refresh)",
     "description": "Copy JSON, paste as Go, TypeScript, C#, C++ and more.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "publisher": "doggy8088",
     "icon": "media/icon.png",
     "galleryBanner": {

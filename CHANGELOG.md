@@ -2,9 +2,11 @@
 
 All notable changes to the "Paste JSON as Code (Refresh)" extension will be documented in this file.
 
-## 1.0.0 - 2022-05-09
+## 1.0.1 - 2022-05-09
 
+* Update `README.md` and `CHANGELOG.md`.
 * Add `System.Text.Json` support for C# target language
+  * This also support .NET 6's `DateOnly` and `TimeOnly` types
 * Add `quicktype.pickCsharpTargetLanguage` setting for choosing one of the following type:
   * `System.Text.Json`
   * `Newtonsoft.Json`
