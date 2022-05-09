@@ -16,8 +16,8 @@ import {
     RendererOptions,
     Options,
     inferenceFlagNames
-} from "quicktype-core";
-import { schemaForTypeScriptSources } from "quicktype-typescript-input";
+} from "./quicktype-core";
+import { schemaForTypeScriptSources } from "./quicktype-typescript-input";
 
 const configurationSection = "quicktype";
 
@@ -69,7 +69,31 @@ async function pickTargetLanguage(): Promise<TargetLanguagePick> {
 }
 
 async function getTargetLanguage(editor: vscode.TextEditor): Promise<TargetLanguagePick> {
-    const documentLanguage = editor.document.languageId;
+    let documentLanguage = editor.document.languageId;
+    if (documentLanguage == 'csharp') {
+        const configuration = vscode.workspace.getConfiguration(configurationSection);
+        let pickCsharpTargetLanguage = configuration.pickCsharpTargetLanguage;
+        if (!pickCsharpTargetLanguage) {
+            pickCsharpTargetLanguage = await vscode.window.showQuickPick(['Newtonsoft.Json', 'System.Text.Json'], {
+                canPickMany: false,
+                placeHolder: 'Choose a method to deal with your JSON processing'
+            });
+            if (!pickCsharpTargetLanguage) {
+                pickCsharpTargetLanguage = 'Newtonsoft.Json';
+            }
+        }
+        switch (pickCsharpTargetLanguage) {
+            case 'System.Text.Json':
+                documentLanguage = 'C# (System.Text.Json)';
+                break;
+            case 'Newtonsoft.Json':
+                documentLanguage = 'C#';
+                break;
+            default:
+                documentLanguage = 'C#';
+                break;
+        }
+    }
     const currentLanguage = languageNamed(documentLanguage);
     if (currentLanguage !== undefined) {
         return {

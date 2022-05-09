@@ -2,6 +2,15 @@
 
 All notable changes to the "Paste JSON as Code (Refresh)" extension will be documented in this file.
 
+## 1.0.0 - 2022-05-09
+
+* Add `System.Text.Json` support for C# target language
+* Add `quicktype.pickCsharpTargetLanguage` setting for choosing one of the following type:
+  * `System.Text.Json`
+  * `Newtonsoft.Json`
+* Use VS Code extension [Data Storage APIs](https://code.visualstudio.com/api/extension-capabilities/common-capabilities#data-storage) (`workspaceState`) instead of using `node-persist` module
+* Minor bug fixes
+
 ## 0.1.1 - 2021-05-28
 
 * Update README.md
