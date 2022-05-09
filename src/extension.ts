@@ -1,6 +1,5 @@
 "use strict";
 
-import { homedir } from "os";
 import * as path from "path";
 
 import * as vscode from "vscode";
@@ -19,7 +18,6 @@ import {
     inferenceFlagNames
 } from "quicktype-core";
 import { schemaForTypeScriptSources } from "quicktype-typescript-input";
-import * as persist from "node-persist";
 
 const configurationSection = "quicktype";
 
@@ -38,7 +36,7 @@ enum Command {
 function jsonIsValid(json: string) {
     try {
         JSON.parse(json);
-    } catch (e) {
+    } catch (e: any) {
         return false;
     }
     return true;
@@ -172,7 +170,7 @@ async function pasteAsTypes(editor: vscode.TextEditor, kind: InputKind, justType
     let content: string;
     try {
         content = await vscode.env.clipboard.readText();
-    } catch (e) {
+    } catch (e: any) {
         vscode.window.showErrorMessage("Could not get clipboard contents");
         return;
     }
@@ -196,7 +194,7 @@ async function pasteAsTypes(editor: vscode.TextEditor, kind: InputKind, justType
     let result: SerializedRenderResult;
     try {
         result = await runQuicktype(content, kind, language.lang, topLevelName, justTypes, indentation, []);
-    } catch (e) {
+    } catch (e: any) {
         // TODO Invalid JSON produces an uncatchable exception from quicktype
         // Fix this so we can catch and show an error message.
         vscode.window.showErrorMessage(e);
@@ -326,7 +324,7 @@ class CodeProvider implements vscode.TextDocumentContentProvider {
             if (!this._isOpen) return;
 
             this._onDidChange.fire(this.uri);
-        } catch (e) {}
+        } catch (e: any) {}
     }
 
     provideTextDocumentContent(_uri: vscode.Uri, _token: vscode.CancellationToken): vscode.ProviderResult<string> {
@@ -413,7 +411,7 @@ async function openForEditor(editor: vscode.TextEditor, inputKind: InputKind): P
     await openQuicktype(inputKind, targetLanguage, editor.document);
 }
 
-async function changeTargetLanguage(): Promise<void> {
+async function changeTargetLanguage(this: vscode.ExtensionContext): Promise<void> {
     const pick = await pickTargetLanguage();
     if (pick.cancelled) return;
 
@@ -422,7 +420,7 @@ async function changeTargetLanguage(): Promise<void> {
 
     await openQuicktype(lastCodeProvider.inputKind, explicitlySetTargetLanguage, lastCodeProvider.document);
 
-    await persist.setItem(lastTargetLanguageUsedKey, explicitlySetTargetLanguage.name);
+    this.workspaceState.update(lastTargetLanguageUsedKey, explicitlySetTargetLanguage.name);
 }
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
@@ -453,12 +451,10 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         vscode.commands.registerTextEditorCommand(Command.OpenQuicktypeForTypeScript, editor =>
             openForEditor(editor, "typescript")
         ),
-        vscode.commands.registerCommand(Command.ChangeTargetLanguage, changeTargetLanguage)
+        vscode.commands.registerCommand(Command.ChangeTargetLanguage, changeTargetLanguage, context),
     );
 
-    await persist.init({ dir: path.join(homedir(), ".quicktype-vscode") });
-
-    const maybeName = await persist.getItem(lastTargetLanguageUsedKey);
+    const maybeName = context.workspaceState.get<string>(lastTargetLanguageUsedKey);
     if (typeof maybeName === "string") {
         explicitlySetTargetLanguage = languageNamed(maybeName);
     }
