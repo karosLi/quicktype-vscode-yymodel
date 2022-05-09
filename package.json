@@ -40,7 +40,8 @@
         "onCommand:quicktype.pasteTypeScriptAsTypesAndSerialization",
         "onCommand:quicktype.openForJSON",
         "onCommand:quicktype.openForJSONSchema",
-        "onCommand:quicktype.openForTypeScript"
+        "onCommand:quicktype.openForTypeScript",
+        "onCommand:quicktype.changeTargetLanguage"
     ],
     "main": "./out/src/extension",
     "contributes": {
