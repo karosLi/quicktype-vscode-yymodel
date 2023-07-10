@@ -1,9 +1,9 @@
 {
-    "name": "quicktype-refresh",
-    "displayName": "Paste JSON as Code (Refresh)",
+    "name": "quicktype-yymodel",
+    "displayName": "Paste JSON as Code (YYModel)",
     "description": "Copy JSON, paste as Go, TypeScript, C#, C++ and more.",
-    "version": "1.0.2",
-    "publisher": "doggy8088",
+    "version": "1.0.5",
+    "publisher": "karosli",
     "icon": "media/icon.png",
     "galleryBanner": {
         "color": "#00212b",
@@ -15,14 +15,15 @@
         "email": "hello@quicktype.io"
     },
     "bugs": {
-        "url": "https://github.com/doggy8088/quicktype/issues"
+        "url": "https://github.com/karosLi/quicktype-vscode-yymodel/issues"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/doggy8088/quicktype-vscode-refresh"
+        "url": "https://github.com/karosLi/quicktype-vscode-yymodel"
     },
     "engines": {
-        "vscode": "^1.52.0"
+        "vscode": "^1.52.0",
+        "node": ">=18.12.0"
     },
     "categories": [
         "Other"
@@ -39,9 +40,8 @@
         "onCommand:quicktype.pasteJSONSchemaAsTypesAndSerialization",
         "onCommand:quicktype.pasteTypeScriptAsTypesAndSerialization",
         "onCommand:quicktype.openForJSON",
-        "onCommand:quicktype.openForJSONSchema",
-        "onCommand:quicktype.openForTypeScript",
-        "onCommand:quicktype.changeTargetLanguage"
+        "onCommand:quicktype.changeTargetLanguage",
+        "onCommand:quicktype.setTypePrefix"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -49,17 +49,9 @@
             "type": "object",
             "title": "quicktype",
             "properties": {
-                "quicktype.pickCsharpTargetLanguage": {
-                    "type": "string",
-                    "description": "There are two C# implementations for JSON processing. System.Text.Json for .NET 6+, Newtonsoft.Json for .NET Standard",
-                    "enum": [
-                        "Newtonsoft.Json",
-                        "System.Text.Json"
-                    ]
-                },
                 "quicktype.justTypes": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Produce just types, or (de-)serialization code as well?"
                 },
                 "quicktype.inferMaps": {
@@ -97,39 +89,35 @@
         "commands": [
             {
                 "command": "quicktype.pasteJSONAsTypes",
-                "title": "Paste JSON as Types"
+                "title": "YYModel - Paste JSON as Types"
             },
             {
                 "command": "quicktype.pasteJSONAsTypesAndSerialization",
-                "title": "Paste JSON as Code"
+                "title": "YYModel - Paste JSON as Code"
             },
             {
                 "command": "quicktype.pasteJSONSchemaAsTypes",
-                "title": "Paste JSON Schema as Types"
+                "title": "YYModel - Paste JSON Schema as Types"
             },
             {
                 "command": "quicktype.pasteJSONSchemaAsTypesAndSerialization",
-                "title": "Paste JSON Schema as Code"
+                "title": "YYModel - Paste JSON Schema as Code"
             },
             {
                 "command": "quicktype.pasteTypeScriptAsTypesAndSerialization",
-                "title": "Paste TypeScript as Code"
+                "title": "YYModel - Paste TypeScript as Code"
             },
             {
                 "command": "quicktype.openForJSON",
-                "title": "Open quicktype for JSON"
-            },
-            {
-                "command": "quicktype.openForJSONSchema",
-                "title": "Open quicktype for JSON Schema"
-            },
-            {
-                "command": "quicktype.openForTypeScript",
-                "title": "Open quicktype for TypeScript"
+                "title": "YYModel - Open quicktype for JSON"
             },
             {
                 "command": "quicktype.changeTargetLanguage",
-                "title": "Set quicktype target language"
+                "title": "YYModel - Set quicktype target language"
+            },
+            {
+                "command": "quicktype.setTypePrefix",
+                "title": "YYModel - Set quicktype type prefix"
             }
         ],
         "keybindings": [
@@ -148,8 +136,8 @@
         ]
     },
     "scripts": {
-        "publish": "vsce publish -p $VSCE_TOKEN",
-        "vscode:prepublish": "npm run compile",
+        "pub": "vsce publish -p $VSCE_TOKEN",
+        "prepub": "npm run compile",
         "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/src/extension.js --external:vscode --format=cjs --platform=node",
         "compile": "npm run -S esbuild-base -- --minify",
         "watch": "npm run -S esbuild-base -- --sourcemap --watch",
@@ -167,8 +155,8 @@
     "dependencies": {
         "@mark.probst/typescript-json-schema": "~0.32.0",
         "@mark.probst/unicode-properties": "~1.1.0",
-        "@willh/quicktype-core": "^6.0.81",
-        "@willh/quicktype-typescript-input": "^0.0.16",
+        "@karosli/quicktype-core": "^23.0.5",
+        "@karosli/quicktype-typescript-input": "^23.0.5",
         "browser-or-node": "^1.2.1",
         "collection-utils": "^1.0.1",
         "is-url": "^1.2.4",
@@ -181,6 +169,8 @@
         "unicode-properties": "github:quicktype/unicode-properties#dist",
         "urijs": "^1.19.1",
         "wordwrap": "^1.0.0",
-        "yaml": "^1.5.0"
+        "yaml": "^1.5.0",
+        "ts-node": "^10.9.1",
+        "tslint": "^6.1.3"
     }
 }

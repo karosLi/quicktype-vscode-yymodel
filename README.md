@@ -1,4 +1,4 @@
-[![Marketplace](https://vsmarketplacebadge.apphb.com/version/quicktype.quicktype.svg)](https://marketplace.visualstudio.com/items/doggy8088.quicktype-refresh) [![Installs](https://vsmarketplacebadge.apphb.com/installs/doggy8088.quicktype-refresh.svg)](https://marketplace.visualstudio.com/items/doggy8088.quicktype-refresh) [![Ratings](https://vsmarketplacebadge.apphb.com/rating-short/doggy8088.quicktype-refresh.svg)](https://marketplace.visualstudio.com/items/doggy8088.quicktype-refresh)
+
 
 ## FAQ
 
@@ -42,3 +42,15 @@ This extension is available for free in the [Visual Studio Code Marketplace](htt
 [quicktype](https://github.com/quicktype/quicktype) is an open source project, and we're always happy about contributors. Due to the lack of maintainence of the original project, I forked a [new one](https://github.com/doggy8088/quicktype) for further developments.  If you can think of a way to improve [this extension](https://github.com/doggy8088/quicktype-vscode-refresh), or [quicktype](https://github.com/doggy8088/quicktype), please consider contributing, especially if you know TypeScript. Code is only one way to contribute, though: we're particularly short on documentation.
 
 If you find a bug, please [report it on GitHub](https://github.com/doggy8088/quicktype-vscode-refresh/issues).
+
+## 插件市场
+
+插件市场
+https://marketplace.visualstudio.com/
+
+发布插件教程
+https://liiked.github.io/VS-Code-Extension-Doc-ZH
+
+发布插件，需要先注册账号，去获取 Personal Access Tokens
+https://azure.microsoft.com/zh-cn/products/devops/
+

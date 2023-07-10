@@ -16,8 +16,8 @@ import {
     RendererOptions,
     Options,
     inferenceFlagNames
-} from "@willh/quicktype-core";
-import { schemaForTypeScriptSources } from "@willh/quicktype-typescript-input";
+} from "@karosli/quicktype-core";
+import { schemaForTypeScriptSources } from "@karosli/quicktype-typescript-input";
 
 const configurationSection = "quicktype";
 
@@ -28,9 +28,10 @@ enum Command {
     PasteSchemaAsTypesAndSerialization = "quicktype.pasteJSONSchemaAsTypesAndSerialization",
     PasteTypeScriptAsTypesAndSerialization = "quicktype.pasteTypeScriptAsTypesAndSerialization",
     OpenQuicktypeForJSON = "quicktype.openForJSON",
-    OpenQuicktypeForJSONSchema = "quicktype.openForJSONSchema",
-    OpenQuicktypeForTypeScript = "quicktype.openForTypeScript",
-    ChangeTargetLanguage = "quicktype.changeTargetLanguage"
+    // OpenQuicktypeForJSONSchema = "quicktype.openForJSONSchema",
+    // OpenQuicktypeForTypeScript = "quicktype.openForTypeScript",
+    ChangeTargetLanguage = "quicktype.changeTargetLanguage",
+    SetTypePrefix = "quicktype.setTypePrefix",// 设置类型前缀
 }
 
 function jsonIsValid(json: string) {
@@ -59,7 +60,14 @@ type TargetLanguagePick = {
 };
 
 async function pickTargetLanguage(): Promise<TargetLanguagePick> {
-    const languageChoices = defaultTargetLanguages.map(l => l.displayName).sort();
+    let languageChoices = defaultTargetLanguages.map(l => l.displayName).sort();
+    let deleteIndex = languageChoices.indexOf("Swift-YYModel");
+    languageChoices.splice(deleteIndex, 1);// 删除
+    deleteIndex = languageChoices.indexOf("Objective-C-YYModel");
+    languageChoices.splice(deleteIndex, 1);// 删除
+    languageChoices.unshift("Swift-YYModel")// 添加元素
+    languageChoices.unshift("Objective-C-YYModel")// 添加元素
+
     let chosenName = await vscode.window.showQuickPick(languageChoices);
     const cancelled = chosenName === undefined;
     if (chosenName === undefined) {
@@ -70,30 +78,6 @@ async function pickTargetLanguage(): Promise<TargetLanguagePick> {
 
 async function getTargetLanguage(editor: vscode.TextEditor): Promise<TargetLanguagePick> {
     let documentLanguage = editor.document.languageId;
-    if (documentLanguage == 'csharp') {
-        const configuration = vscode.workspace.getConfiguration(configurationSection);
-        let pickCsharpTargetLanguage = configuration.pickCsharpTargetLanguage;
-        if (!pickCsharpTargetLanguage) {
-            pickCsharpTargetLanguage = await vscode.window.showQuickPick(['Newtonsoft.Json', 'System.Text.Json'], {
-                canPickMany: false,
-                placeHolder: 'Choose a method to deal with your JSON processing'
-            });
-            if (!pickCsharpTargetLanguage) {
-                pickCsharpTargetLanguage = 'Newtonsoft.Json';
-            }
-        }
-        switch (pickCsharpTargetLanguage) {
-            case 'System.Text.Json':
-                documentLanguage = 'C# (System.Text.Json)';
-                break;
-            case 'Newtonsoft.Json':
-                documentLanguage = 'C#';
-                break;
-            default:
-                documentLanguage = 'C#';
-                break;
-        }
-    }
     const currentLanguage = languageNamed(documentLanguage);
     if (currentLanguage !== undefined) {
         return {
@@ -104,6 +88,21 @@ async function getTargetLanguage(editor: vscode.TextEditor): Promise<TargetLangu
     return await pickTargetLanguage();
 }
 
+async function getInputtedTypePrefix(): Promise<{ cancelled: boolean; name: string }> {
+    // 打开一个 input
+    let typePrefix = await vscode.window.showInputBox({
+        ignoreFocusOut: true, // 当焦点移动到编辑器的另一部分或另一个窗口时, 保持输入框打开
+        password: false, // 为 true 就表示是密码类型
+        prompt: "请输入类型前缀", // 文本输入提示
+        value: "QT",
+    })
+
+    return  {
+        cancelled: typePrefix === undefined,
+        name: typePrefix || "QT"
+    };
+}
+
 type InputKind = "json" | "schema" | "typescript";
 
 async function runQuicktype(
@@ -111,6 +110,7 @@ async function runQuicktype(
     kind: InputKind,
     lang: TargetLanguage,
     topLevelName: string,
+    typePrefix: string,// 所有生成的类型前缀
     forceJustTypes: boolean,
     indentation: string | undefined,
     additionalLeadingComments: string[]
@@ -129,6 +129,12 @@ async function runQuicktype(
             rendererOptions["just-types"] = "true";
         }
     }
+    
+    if (lang.name === "objc-yymodel") {
+        rendererOptions["class-prefix"] = typePrefix || "QT";
+    } else if (lang.name === "swift-yymodel") {
+        rendererOptions["type-prefix"] = typePrefix || "QT";
+    } 
 
     const inputData = new InputData();
     switch (kind) {
@@ -147,9 +153,7 @@ async function runQuicktype(
         case "typescript":
             await inputData.addSource(
                 "schema",
-                schemaForTypeScriptSources({
-                    [`${topLevelName}.ts`]: content
-                }),
+                schemaForTypeScriptSources([`${topLevelName}.ts`]),
                 () => new JSONSchemaInput(undefined)
             );
             break;
@@ -160,7 +164,7 @@ async function runQuicktype(
     const options: Partial<Options> = {
         lang: lang,
         inputData,
-        leadingComments: ["Generated by https://quicktype.io"].concat(additionalLeadingComments),
+        leadingComments: [],
         rendererOptions,
         indentation,
         inferMaps: configuration.inferMaps,
@@ -217,7 +221,7 @@ async function pasteAsTypes(editor: vscode.TextEditor, kind: InputKind, justType
 
     let result: SerializedRenderResult;
     try {
-        result = await runQuicktype(content, kind, language.lang, topLevelName, justTypes, indentation, []);
+        result = await runQuicktype(content, kind, language.lang, topLevelName, "QT", justTypes, indentation, []);
     } catch (e: any) {
         // TODO Invalid JSON produces an uncatchable exception from quicktype
         // Fix this so we can catch and show an error message.
@@ -254,6 +258,7 @@ class CodeProvider implements vscode.TextDocumentContentProvider {
     constructor(
         private _inputKind: InputKind,
         private readonly _targetLanguage: TargetLanguage,
+        private _typePrefix: string,
         private _document: vscode.TextDocument
     ) {
         this.scheme = `quicktype-${this._targetLanguage.name}`;
@@ -282,6 +287,14 @@ class CodeProvider implements vscode.TextDocumentContentProvider {
 
     setInputKind(inputKind: InputKind): void {
         this._inputKind = inputKind;
+    }
+
+    get typePrefix(): string {
+        return this._typePrefix;
+    }
+
+    setTypePrefix(typePrefix: string): void {
+        this._typePrefix = typePrefix;
     }
 
     get document(): vscode.TextDocument {
@@ -334,14 +347,16 @@ class CodeProvider implements vscode.TextDocumentContentProvider {
         this._documentText = this._document.getText();
 
         try {
+            // 运行 quicktype
             const result = await runQuicktype(
                 this._documentText,
                 this._inputKind,
                 this._targetLanguage,
                 this.documentName,
+                this._typePrefix,
                 false,
                 undefined,
-                ["", "To change quicktype's target language, run command:", "", '  "Set quicktype target language"']
+                [""]// 每生成一个类型，插入的注释，现在不需要
             );
             this._targetCode = result.lines.join("\n");
 
@@ -375,10 +390,15 @@ function deduceTargetLanguage(): TargetLanguage {
         const lang = languageNamed(name);
         if (lang !== undefined) return lang;
     }
-    return languageNamed("typescript")!;
+    return languageNamed("objc-yymodel")!;// 默认语言
+}
+
+function deduceTypePrefix(): string {
+    return "QT";// 默认类型前缀
 }
 
 const lastTargetLanguageUsedKey = "lastTargetLanguageUsed";
+const lastTypePrefixUsedKey = "lastTypePrefixUsed";
 
 let extensionContext: vscode.ExtensionContext | undefined = undefined;
 
@@ -386,15 +406,17 @@ const codeProviders: Map<string, CodeProvider> = new Map();
 
 let lastCodeProvider: CodeProvider | undefined = undefined;
 let explicitlySetTargetLanguage: TargetLanguage | undefined = undefined;
+let explicitlySetTypePrefix: string | undefined = undefined; // 是否有显示的设置类型前缀
 
 async function openQuicktype(
     inputKind: InputKind,
     targetLanguage: TargetLanguage,
+    typePrefix: string,
     document: vscode.TextDocument
 ): Promise<void> {
     let codeProvider = codeProviders.get(targetLanguage.name);
     if (codeProvider === undefined) {
-        codeProvider = new CodeProvider(inputKind, targetLanguage, document);
+        codeProvider = new CodeProvider(inputKind, targetLanguage, typePrefix, document);
         codeProviders.set(targetLanguage.name, codeProvider);
         if (extensionContext !== undefined) {
             extensionContext.subscriptions.push(
@@ -404,6 +426,7 @@ async function openQuicktype(
     } else {
         codeProvider.setInputKind(inputKind);
         codeProvider.setDocument(document);
+        codeProvider.setTypePrefix(typePrefix);
     }
 
     let originalEditor: vscode.TextEditor | undefined;
@@ -432,7 +455,9 @@ async function openQuicktype(
 async function openForEditor(editor: vscode.TextEditor, inputKind: InputKind): Promise<void> {
     const targetLanguage =
         explicitlySetTargetLanguage !== undefined ? explicitlySetTargetLanguage : deduceTargetLanguage();
-    await openQuicktype(inputKind, targetLanguage, editor.document);
+    const typePrefix =
+        explicitlySetTypePrefix !== undefined ? explicitlySetTypePrefix : deduceTypePrefix();
+    await openQuicktype(inputKind, targetLanguage, typePrefix, editor.document);
 }
 
 async function changeTargetLanguage(this: vscode.ExtensionContext): Promise<void> {
@@ -442,9 +467,25 @@ async function changeTargetLanguage(this: vscode.ExtensionContext): Promise<void
     explicitlySetTargetLanguage = pick.lang;
     if (lastCodeProvider === undefined) return;
 
-    await openQuicktype(lastCodeProvider.inputKind, explicitlySetTargetLanguage, lastCodeProvider.document);
+    const typePrefix =
+        explicitlySetTypePrefix !== undefined ? explicitlySetTypePrefix : deduceTypePrefix();
+    await openQuicktype(lastCodeProvider.inputKind, explicitlySetTargetLanguage, lastCodeProvider.typePrefix, lastCodeProvider.document);
 
     this.workspaceState.update(lastTargetLanguageUsedKey, explicitlySetTargetLanguage.name);
+}
+
+async function setTypePrefix(this: vscode.ExtensionContext): Promise<void> {
+    const typePrefix = await getInputtedTypePrefix();
+    if (typePrefix.cancelled) return;
+
+    explicitlySetTypePrefix = typePrefix.name;
+    if (lastCodeProvider === undefined) return;
+
+    const targetLanguage =
+        explicitlySetTargetLanguage !== undefined ? explicitlySetTargetLanguage : deduceTargetLanguage();
+    await openQuicktype(lastCodeProvider.inputKind, targetLanguage, explicitlySetTypePrefix, lastCodeProvider.document);
+
+    this.workspaceState.update(lastTypePrefixUsedKey, explicitlySetTypePrefix);
 }
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
@@ -469,18 +510,24 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         vscode.commands.registerTextEditorCommand(Command.OpenQuicktypeForJSON, editor =>
             openForEditor(editor, "json")
         ),
-        vscode.commands.registerTextEditorCommand(Command.OpenQuicktypeForJSONSchema, editor =>
-            openForEditor(editor, "schema")
-        ),
-        vscode.commands.registerTextEditorCommand(Command.OpenQuicktypeForTypeScript, editor =>
-            openForEditor(editor, "typescript")
-        ),
+        // vscode.commands.registerTextEditorCommand(Command.OpenQuicktypeForJSONSchema, editor =>
+        //     openForEditor(editor, "schema")
+        // ),
+        // vscode.commands.registerTextEditorCommand(Command.OpenQuicktypeForTypeScript, editor =>
+        //     openForEditor(editor, "typescript")
+        // ),
         vscode.commands.registerCommand(Command.ChangeTargetLanguage, changeTargetLanguage, context),
+        vscode.commands.registerCommand(Command.SetTypePrefix, setTypePrefix, context),// 设置类型前缀
     );
 
     const maybeName = context.workspaceState.get<string>(lastTargetLanguageUsedKey);
     if (typeof maybeName === "string") {
         explicitlySetTargetLanguage = languageNamed(maybeName);
+    }
+
+    const maybeTypePrefixName = context.workspaceState.get<string>(lastTypePrefixUsedKey);
+    if (typeof maybeTypePrefixName === "string") {
+        explicitlySetTypePrefix = maybeTypePrefixName;
     }
 }
 
