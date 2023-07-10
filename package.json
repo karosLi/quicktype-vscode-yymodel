@@ -2,7 +2,7 @@
     "name": "quicktype-yymodel",
     "displayName": "Paste JSON as Code (YYModel)",
     "description": "Copy JSON, paste as Go, TypeScript, C#, C++ and more.",
-    "version": "1.0.6",
+    "version": "1.0.8",
     "publisher": "karosli",
     "icon": "media/icon.png",
     "galleryBanner": {
@@ -34,14 +34,7 @@
     ],
     "markdown": "github",
     "activationEvents": [
-        "onCommand:extension:quicktype.pasteJSONAsTypes",
-        "onCommand:extension:quicktype.pasteJSONAsTypesAndSerialization",
-        "onCommand:extension:quicktype.pasteJSONSchemaAsTypes",
-        "onCommand:extension:quicktype.pasteJSONSchemaAsTypesAndSerialization",
-        "onCommand:extension:quicktype.pasteTypeScriptAsTypesAndSerialization",
-        "onCommand:extension:quicktype.openForJSON",
-        "onCommand:extension:quicktype.changeTargetLanguage",
-        "onCommand:extension:quicktype.setTypePrefix"
+        "onLanguage:json"
     ],
     "main": "./out/src/extension",
     "contributes": {
