@@ -61,12 +61,16 @@ type TargetLanguagePick = {
 
 async function pickTargetLanguage(): Promise<TargetLanguagePick> {
     let languageChoices = defaultTargetLanguages.map(l => l.displayName).sort();
-    let deleteIndex = languageChoices.indexOf("Swift-YYModel");
+    let deleteIndex = languageChoices.indexOf("Java-GSON");
+    languageChoices.splice(deleteIndex, 1);// 删除
+    deleteIndex = languageChoices.indexOf("Swift-YYModel");
     languageChoices.splice(deleteIndex, 1);// 删除
     deleteIndex = languageChoices.indexOf("Objective-C-YYModel");
     languageChoices.splice(deleteIndex, 1);// 删除
-    languageChoices.unshift("Swift-YYModel")// 添加元素
-    languageChoices.unshift("Objective-C-YYModel")// 添加元素
+    
+    languageChoices.unshift("Java-GSON")// 添加元素到头部
+    languageChoices.unshift("Swift-YYModel")// 添加元素到头部
+    languageChoices.unshift("Objective-C-YYModel")// 添加元素到头部
 
     let chosenName = await vscode.window.showQuickPick(languageChoices);
     const cancelled = chosenName === undefined;
