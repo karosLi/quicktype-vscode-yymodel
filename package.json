@@ -2,7 +2,7 @@
     "name": "quicktype-yymodel",
     "displayName": "Paste JSON as Code (YYModel)",
     "description": "Copy JSON, paste as Go, TypeScript, C#, C++ and more. 支持 json 转成 oc-yymodel 和 swift-yymodel 形式",
-    "version": "1.0.15",
+    "version": "1.0.16",
     "publisher": "karosli",
     "icon": "media/icon.png",
     "galleryBanner": {
@@ -33,7 +33,14 @@
     ],
     "markdown": "github",
     "activationEvents": [
-        "onLanguage:json"
+        "onCommand:quicktype.pasteJSONAsTypes",
+        "onCommand:quicktype.pasteJSONAsTypesAndSerialization",
+        "onCommand:quicktype.pasteJSONSchemaAsTypes",
+        "onCommand:quicktype.pasteJSONSchemaAsTypesAndSerialization",
+        "onCommand:quicktype.pasteTypeScriptAsTypesAndSerialization",
+        "onCommand:quicktype.openForJSON",
+        "onCommand:quicktype.changeTargetLanguage",
+        "onCommand:quicktype.setTypePrefix"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -81,35 +88,43 @@
         "commands": [
             {
                 "command": "quicktype.pasteJSONAsTypes",
-                "title": "YYModel - Paste JSON as Types"
+                "title": "YYModel - Paste JSON as Types",
+                "category": "quicktype"
             },
             {
                 "command": "quicktype.pasteJSONAsTypesAndSerialization",
-                "title": "YYModel - Paste JSON as Code"
+                "title": "YYModel - Paste JSON as Code",
+                "category": "quicktype"
             },
             {
                 "command": "quicktype.pasteJSONSchemaAsTypes",
-                "title": "YYModel - Paste JSON Schema as Types"
+                "title": "YYModel - Paste JSON Schema as Types",
+                "category": "quicktype"
             },
             {
                 "command": "quicktype.pasteJSONSchemaAsTypesAndSerialization",
-                "title": "YYModel - Paste JSON Schema as Code"
+                "title": "YYModel - Paste JSON Schema as Code",
+                "category": "quicktype"
             },
             {
                 "command": "quicktype.pasteTypeScriptAsTypesAndSerialization",
-                "title": "YYModel - Paste TypeScript as Code"
+                "title": "YYModel - Paste TypeScript as Code",
+                "category": "quicktype"
             },
             {
                 "command": "quicktype.openForJSON",
-                "title": "YYModel - Open quicktype for JSON"
+                "title": "YYModel - Open quicktype for JSON",
+                "category": "quicktype"
             },
             {
                 "command": "quicktype.changeTargetLanguage",
-                "title": "YYModel - Set quicktype target language"
+                "title": "YYModel - Set quicktype target language",
+                "category": "quicktype"
             },
             {
                 "command": "quicktype.setTypePrefix",
-                "title": "YYModel - Set quicktype type prefix"
+                "title": "YYModel - Set quicktype type prefix",
+                "category": "quicktype"
             }
         ],
         "keybindings": [
