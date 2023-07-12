@@ -18,6 +18,7 @@ import {
     inferenceFlagNames
 } from "@karosli/quicktype-core";
 import { schemaForTypeScriptSources } from "@karosli/quicktype-typescript-input";
+import stripJsonComments from "strip-json-comments-cjs"
 
 const configurationSection = "quicktype";
 
@@ -140,17 +141,18 @@ async function runQuicktype(
         rendererOptions["type-prefix"] = typePrefix || "QT";
     } 
 
+    const contentWithoutComment = stripJsonComments(content);
     const inputData = new InputData();
     switch (kind) {
         case "json":
-            await inputData.addSource("json", { name: topLevelName, samples: [content] }, () =>
+            await inputData.addSource("json", { name: topLevelName, samples: [contentWithoutComment] }, () =>
                 jsonInputForTargetLanguage(lang)
             );
             break;
         case "schema":
             await inputData.addSource(
                 "schema",
-                { name: topLevelName, schema: content },
+                { name: topLevelName, schema: contentWithoutComment },
                 () => new JSONSchemaInput(undefined)
             );
             break;

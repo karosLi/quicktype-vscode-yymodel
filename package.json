@@ -2,7 +2,7 @@
     "name": "quicktype-yymodel",
     "displayName": "Paste JSON as Code (YYModel)",
     "description": "Copy JSON, paste as Go, TypeScript, C#, C++ and more. 支持 json 转成 oc-yymodel 和 swift-yymodel 形式",
-    "version": "1.0.20",
+    "version": "1.0.21",
     "publisher": "karosli",
     "icon": "media/icon.png",
     "galleryBanner": {
@@ -175,6 +175,7 @@
         "pako": "^2.1.0",
         "pluralize": "^8.0.0",
         "readable-stream": "^4.4.0",
+        "strip-json-comments-cjs": "^5.0.0",
         "unicode-properties": "^1.4.1",
         "wordwrap": "^1.0.0",
         "yaml": "^2.3.1",
