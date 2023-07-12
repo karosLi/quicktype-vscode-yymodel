@@ -2,6 +2,11 @@
 
 All notable changes to the "Paste JSON as Code (Refresh)" extension will be documented in this file.
 
+## 1.0.19 - 2023-07-12
+
+* 支持 json 转 YYModel
+* 支持带注释的 json
+
 ## 1.0.2 - 2022-05-17
 
 * Fixes a bug on switching target language for C#.
